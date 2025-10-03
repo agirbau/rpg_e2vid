@@ -1,3 +1,4 @@
+# Not used anymore, see docker-compose.yaml
 #!/bin/bash
 
 E2VID_PATH=/home/andreu/work/projects/research/rpg_e2vid

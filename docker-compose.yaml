@@ -1,0 +1,24 @@
+version: "3.9"
+services:
+  e2vid:
+    build:
+      context: .
+      dockerfile: docker_env/Dockerfile
+    image: e2vid:latest
+    container_name: e2vid
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    volumes:
+      - /home/andreu/work/projects/research/rpg_e2vid:/home/user/app
+      - /home/andreu/datasets:/home/user/datasets
+    environment:
+      - E2VID_PATH=/home/user/app
+      - E2VID_DATA=/home/user/datasets
+    stdin_open: true
+    tty: true
