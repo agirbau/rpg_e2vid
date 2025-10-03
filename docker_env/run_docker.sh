@@ -1,3 +1,8 @@
 #!/bin/bash
+set -e
 
-docker-compose up
+# Stop any running containers
+docker-compose down
+
+# Start an interactive shell in A
+docker-compose run --rm e2vid bash

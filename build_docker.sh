@@ -9,4 +9,5 @@ set -e
     wget -c http://rpg.ifi.uzh.ch/data/E2VID/datasets/ECD_IJRR17/dynamic_6dof.zip -O data/dynamic_6dof.zip
 
 # Build docker image using Compose
+docker-compose down --rmi local -v
 docker-compose build
