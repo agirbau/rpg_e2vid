@@ -52,22 +52,7 @@ COPY --chown=user:user . /home/user/app
 RUN pip install --no-cache-dir --upgrade pip
 
 # Install required Python packages (numpy, pandas, opencv, etc.)
-RUN pip install --no-cache-dir \
-    numpy \
-    pandas \
-    opencv-python \
-    matplotlib \
-    scipy \
-    tqdm
-
-# --- Download pretrained model ---
-RUN mkdir -p pretrained \
-    && wget http://rpg.ifi.uzh.ch/data/E2VID/models/E2VID_lightweight.pth.tar -O pretrained/E2VID_lightweight.pth.tar
-
-# --- Create data directory (for mounting or sample data) ---
-RUN mkdir -p data \
-    && wget "http://rpg.ifi.uzh.ch/data/E2VID/datasets/ECD_IJRR17/dynamic_6dof.zip" -O data/dynamic_6dof.zip
+RUN pip install --no-cache-dir -r requirements.txt
 
 # --- Entrypoint / default command ---
-ENTRYPOINT ["python", "run_reconstruction.py"]
-CMD ["-c", "pretrained/E2VID_lightweight.pth.tar", "-i", "data", "--auto_hdr", "--display"]
+CMD ["/bin/bash"]
