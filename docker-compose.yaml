@@ -18,7 +18,13 @@ services:
       - /home/andreu/work/projects/research/rpg_e2vid:/home/user/app
       - /home/andreu/datasets:/home/user/datasets
     environment:
+      - PORT=8000
       - E2VID_PATH=/home/user/app
       - E2VID_DATA=/home/user/datasets
+      - http_proxy=http://10.81.247.64:8080
+      - https_proxy=http://10.81.247.64:8080
+      - no_proxy=localhost,127.0.0.1,e2vid,semanticeventdownsampling
+    expose:
+      - "8000"
     stdin_open: true
     tty: true
