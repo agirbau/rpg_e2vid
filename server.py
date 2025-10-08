@@ -76,6 +76,8 @@ def load_model(request: Request, model_path: str = "pretrained/E2VID_lightweight
       curl -X POST "http://localhost:8000/load_model?model_path=pretrained/E2VID_lightweight.pth.tar"
     """
     app = request.app
+    app.state.args["width"] = width
+    app.state.args["height"] = height
 
     if getattr(app.state, "model", None) is not None:
         raise HTTPException(status_code=400, detail="Model already loaded.")
@@ -151,7 +153,7 @@ def unload_model(request: Request):
     
 
 @app.post("/infer")
-def infer(request: Request):
+async def infer(request: Request):
     """
     Performs inference using the loaded E2VID model on the provided event data.
     The event data should be sent as a MessagePack-encoded binary payload with keys 't', 'x', 'y', 'p'.
@@ -167,11 +169,16 @@ def infer(request: Request):
     if model is None:
         raise HTTPException(status_code=400, detail="No model loaded. Please load a model first.")
 
+    print("[INFO] Received inference request.")
     # Read raw binary body
-    body = asyncio.run(request.body())
+    body = await request.body()
+
+    print(f"[INFO] Received inference request with payload size: {len(body)} bytes")
 
     # Decode MessagePack into a Python dict
     event_window = msgpack.unpackb(body, object_hook=mnp.decode, raw=False)
+
+    print(f"[INFO] Received event window with {event_window.shape} events.")
 
     if args.compute_voxel_grid_on_cpu:
         event_tensor = events_to_voxel_grid(event_window,
@@ -185,6 +192,8 @@ def infer(request: Request):
                                                     width=width,
                                                     height=height,
                                                     device=device)
+
+    print(f"[INFO] Event tensor shape: {event_tensor.shape}, dtype: {event_tensor.dtype}, device: {event_tensor.device}")
 
     num_events_in_window = event_window.shape[0]
     out = reconstructor.server_update_reconstruction(event_tensor, 0)
