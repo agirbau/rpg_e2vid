@@ -143,6 +143,7 @@ def unload_model(request: Request):
 
         # If using CUDA, free GPU memory
         if app.state.device == "cuda":
+            gc.collect()
             torch.cuda.empty_cache()
 
         print("[INFO] Model successfully unloaded.")
