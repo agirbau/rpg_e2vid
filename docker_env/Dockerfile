@@ -2,8 +2,8 @@
 FROM pytorch/pytorch:1.13.1-cuda11.6-cudnn8-devel
 
 ENV no_proxy="10.81.0.0/16,172.16.0.0/16,localhost"
-ENV http_proxy="http://10.81.247.64:8080"
-ENV https_proxy="http://10.81.247.64:8080"
+ENV http_proxy="http://10.81.247.8:8080"
+ENV https_proxy="http://10.81.247.8:8080"
 
 # Install HDF5 library, build tools, etc. from ROOT user
 USER root
